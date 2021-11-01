@@ -32,11 +32,20 @@ final class MyViewController : UIViewController {
       preconditionFailure("Thre was a problem getting the url from string")
     }
     
-    // Send an asynchronous block into a default background queue to make the dirty work
-    DispatchQueue.global(qos: .default).async {
-      // Try to get data from the url
-      guard let data: Data = try? Data(contentsOf: url) else {
-        preconditionFailure("Thre was a problem getting the data from url")
+    // A simple session with default configuration
+    let session: URLSession = URLSession(configuration: .default)
+    // A request with the simple url string
+    let request: URLRequest = URLRequest(url: url)
+    // Another important object in this process to get the resource from the request, this in raw data
+    let dataTask: URLSessionDataTask = session.dataTask(with: request) { data, response, error in
+      // If there is an error with the request this would be sent a preconditionFailure
+      if error != nil {
+        preconditionFailure("Thre was a problem getting the data from url: \(error!.localizedDescription)")
+      }
+      
+      // If there is not data this would be sent a preconditionFailure
+      guard let data = data else {
+        preconditionFailure("It was not possible to get data")
       }
       
       // Transform the date into an image
@@ -47,6 +56,8 @@ final class MyViewController : UIViewController {
         self?.imageView.image = image
       }
     }
+    
+    dataTask.resume()
   }
 }
 
