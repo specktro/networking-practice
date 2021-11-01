@@ -3,18 +3,30 @@ import PlaygroundSupport
 
 // MARK: MyViewController class
 final class MyViewController : UIViewController {
+  // MARK: - Properties
+  private weak var imageView: UIImageView!
+  
   // MARK: - Lifecycle methods
   override func loadView() {
     let view: UIView = UIView()
     view.backgroundColor = .white
     
-    let label: UILabel = UILabel()
-    label.frame = CGRect(x: 150, y: 200, width: 200, height: 20)
-    label.text = "Hello World!"
-    label.textColor = .black
+    let imageView: UIImageView = UIImageView(frame: .zero)
+    imageView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(imageView)
+    self.imageView = imageView
     
-    view.addSubview(label)
     self.view = view
+  }
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    
+    let image: UIImage? = UIImage(named: "swift.jpg")
+    self.imageView.image = image
   }
 }
 
