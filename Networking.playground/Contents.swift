@@ -1,5 +1,6 @@
 import UIKit
 import PlaygroundSupport
+import Foundation
 
 // MARK: MyViewController class
 final class MyViewController : UIViewController {
@@ -25,7 +26,15 @@ final class MyViewController : UIViewController {
     imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     
-    let image: UIImage? = UIImage(named: "swift.jpg")
+    guard let url: URL = URL(string: "https://goo.gl/wV9G4I") else {
+      preconditionFailure("Thre was a problem getting the url from string")
+    }
+    
+    guard let data: Data = try? Data(contentsOf: url) else {
+      preconditionFailure("Thre was a problem getting the data from url")
+    }
+    
+    let image: UIImage? = UIImage(data: data)
     self.imageView.image = image
   }
 }
