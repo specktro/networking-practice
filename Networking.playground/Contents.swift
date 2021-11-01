@@ -1,9 +1,11 @@
 import UIKit
 import PlaygroundSupport
+import Foundation
 
 // MARK: MyViewController class
 final class MyViewController : UIViewController {
   // MARK: - Properties
+  private let imageURL: String = "https://goo.gl/wV9G4I"
   private weak var imageView: UIImageView!
   
   // MARK: - Lifecycle methods
@@ -25,7 +27,18 @@ final class MyViewController : UIViewController {
     imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     
-    let image: UIImage? = UIImage(named: "swift.jpg")
+    // Try to get a valid url from image url string
+    guard let url: URL = URL(string: imageURL) else {
+      preconditionFailure("Thre was a problem getting the url from string")
+    }
+    
+    // Try to get data from the url
+    guard let data: Data = try? Data(contentsOf: url) else {
+      preconditionFailure("Thre was a problem getting the data from url")
+    }
+    
+    // Transform the date into an image
+    let image: UIImage? = UIImage(data: data)
     self.imageView.image = image
   }
 }
