@@ -32,14 +32,21 @@ final class MyViewController : UIViewController {
       preconditionFailure("Thre was a problem getting the url from string")
     }
     
-    // Try to get data from the url
-    guard let data: Data = try? Data(contentsOf: url) else {
-      preconditionFailure("Thre was a problem getting the data from url")
+    // Send an asynchronous block into a default background queue to make the dirty work
+    DispatchQueue.global(qos: .default).async {
+      // Try to get data from the url
+      guard let data: Data = try? Data(contentsOf: url) else {
+        preconditionFailure("Thre was a problem getting the data from url")
+      }
+      
+      // Transform the date into an image
+      let image: UIImage? = UIImage(data: data)
+      
+      // If you are going to update the user interface it must be done into the main thread
+      DispatchQueue.main.sync { [weak self] in
+        self?.imageView.image = image
+      }
     }
-    
-    // Transform the date into an image
-    let image: UIImage? = UIImage(data: data)
-    self.imageView.image = image
   }
 }
 
