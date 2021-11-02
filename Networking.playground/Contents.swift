@@ -2,10 +2,13 @@ import UIKit
 import PlaygroundSupport
 import Foundation
 
-class Network {
+// MARK: - Network class
+final class Network {
+  // MARK: - Properties
   private let imageURL: String = "https://goo.gl/wV9G4I"
   
-  func getImage(_ completion: @escaping () -> ()) {
+  // MARK: - Methods
+  func getImage(_ completion: @escaping (UIImage?) -> ()) {
     // Try to get a valid url from image url string
     guard let url: URL = URL(string: imageURL) else {
       preconditionFailure("Thre was a problem getting the url from string")
@@ -30,10 +33,8 @@ class Network {
       // Transform the date into an image
       let image: UIImage? = UIImage(data: data)
       
-      // If you are going to update the user interface it must be done into the main thread
-//      DispatchQueue.main.sync { [weak self] in
-//        self?.imageView.image = image
-//      }
+      // Send image into completion
+      completion(image)
     }
     
     dataTask.resume()
@@ -63,6 +64,14 @@ final class MyViewController : UIViewController {
     
     imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    
+    // Create the worker and request the image into the main thread
+    let networker: Network = Network()
+    networker.getImage { image in
+      DispatchQueue.main.async { [weak self] in
+        self?.imageView.image = image
+      }
+    }
   }
 }
 
