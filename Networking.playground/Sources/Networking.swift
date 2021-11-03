@@ -1,4 +1,5 @@
-import UIKit
+import Foundation
+import CoreImage
 
 // MARK: - Network class
 public final class Network {
@@ -11,7 +12,7 @@ public final class Network {
   }
   
   // MARK: - Public methods
-  public func getImage(from imageURL: String, _ completion: @escaping (UIImage?) -> ()) {
+  public func getImage(from imageURL: String, _ completion: @escaping (CIImage?) -> ()) {
     // Try to get a valid url from image url string
     guard let url: URL = URL(string: imageURL) else {
       preconditionFailure("Thre was a problem getting the url from string")
@@ -31,8 +32,8 @@ public final class Network {
         preconditionFailure("It was not possible to get data")
       }
       
-      // Transform the date into an image
-      let image: UIImage? = UIImage(data: data)
+      // Transform the date into a Core Image
+      let image: CIImage? = CIImage(data: data)
       
       // Send image into completion
       completion(image)

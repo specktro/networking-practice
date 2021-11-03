@@ -1,4 +1,5 @@
 import UIKit
+import CoreImage
 
 // MARK: MyViewController class
 final public class MyViewController: UIViewController {
@@ -26,9 +27,12 @@ final public class MyViewController: UIViewController {
     
     // Create the worker and request the image into the main thread
     let networker: Network = Network()
-    networker.getImage(from: "https://goo.gl/wV9G4I") { image in
-      DispatchQueue.main.async { [weak self] in
-        self?.imageView.image = image
+    networker.getImage(from: "https://goo.gl/wV9G4I") { ciImage in
+      if let ciImage = ciImage {
+        DispatchQueue.main.async { [weak self] in
+          let image: UIImage = UIImage(ciImage: ciImage)
+          self?.imageView.image = image
+        }
       }
     }
   }
