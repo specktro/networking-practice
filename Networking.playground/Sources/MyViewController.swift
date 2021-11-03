@@ -26,7 +26,7 @@ final public class MyViewController: UIViewController {
     
     // Create the worker and request the image into the main thread
     let networker: Network = Network()
-    networker.getImage { image in
+    networker.getImage(from: "https://goo.gl/wV9G4I") { image in
       DispatchQueue.main.async { [weak self] in
         self?.imageView.image = image
       }
